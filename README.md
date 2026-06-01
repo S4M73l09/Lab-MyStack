@@ -47,8 +47,31 @@ Los workflows de **Github Actions** son creados en la misma ruta de `.github/wor
   4. Ejecuta una prueba simulada
 
   Objetivo educativo:
-  - Entender la estructura mínima de Github Actions.
+  - Entender la estructura mínima de Github Actions
   - Ver variables de contexto
   - Validar que el pipeline corre correctamente
 </details>
 
+[`.github/workflows/Basic-ci-python.yaml`](./.github/workflows/Basic-ci-python.yaml)
+
+<details>
+  <summary><strong>Explicacion de Basic-ci-python</strong></summary>
+
+  Este workflow se ejecuta en:
+  - `push` a la rama main
+  - `pull_request`
+
+  Qué hace:
+  1. Utiliza permiso de escritura y lectura
+  2. Añade concurrency para que solo se pueda activar un run
+  3. Hace checkout del repositorio
+  4. Hace set up y instala depedencias de `python` ***3.12***
+  5. Hace validacion y check de la instalacion de python
+  6. Ejecuta el codigo de python alojado en:
+      - [`Test_App_python/test_app.py`](/Test_App_python/test_app.py) importado desde [`App_python_test/app.py`](/App_python_test/app.py)
+
+  Objetivo educativo:
+  - Entender la estructura con Python
+  - Ver como funciona
+  - Validar que el pipeline corre perfectamente y el codigo de python igual
+  </details>
