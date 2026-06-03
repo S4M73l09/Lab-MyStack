@@ -3,9 +3,22 @@
 Este repositorio has sido creado para servir como un entorno educativo para el conocimiento de herramientas `DevOps/CI/CD` y 
 el uso de mas herramientas.
 
+## Indice
+
+- [Pipelines basicos](#Pipelines-Basicos (CI/CD))
+- [Docker](Docker-example)
+
+
+
 ### Herramientas que se mostraran su uso
 
 `Azure` - `Gcloud` - `Terraform` - `Ansible` - `Actions` - `Docker` - `Kubernetes` - `Checkov` - `Trivy` - `OPA/conftest`
+
+---
+
+En este apartado se mostrara las explicaciones y ejemplos para el uso de workflows o pipelines de CI/CD, mostrando como funciona y evolucionando poco a poco para aprender de mejor manera el uso de estos, tambien añadiendo complejidad conforme mas queramos evolucionar.
+
+# Pipelines Basicos (CI/CD)
 
 ## Explicaciones de los pipelines
 
