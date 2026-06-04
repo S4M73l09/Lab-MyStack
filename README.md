@@ -3,10 +3,15 @@
 Este repositorio has sido creado para servir como un entorno educativo para el conocimiento de herramientas `DevOps/CI/CD` y 
 el uso de mas herramientas.
 
+En el sigguiente indice se mostrara los contenidos futuros para que puedas seleccionar lo que mas quieras conocer.
+
 ## Indice
 
-- [Pipelines basicos](#Pipelines-Basicos (CI/CD))
+- [Pipelines Basicos](#pipelines-basicos)
+   - [Explicaciones de los pipelines](#explicaciones-de-los-pipelines)
+   - [Explicaciones de ejemplos de pipelines](#explicacion-de-ejemplos-de-pipelines)
 - [Docker](Docker-example)
+   - [compose](Docker-example/compose)
 
 
 
@@ -18,7 +23,7 @@ el uso de mas herramientas.
 
 En este apartado se mostrara las explicaciones y ejemplos para el uso de workflows o pipelines de CI/CD, mostrando como funciona y evolucionando poco a poco para aprender de mejor manera el uso de estos, tambien añadiendo complejidad conforme mas queramos evolucionar.
 
-# Pipelines Basicos (CI/CD)
+# Pipelines Basicos
 
 ## Explicaciones de los pipelines
 
