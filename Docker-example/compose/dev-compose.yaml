@@ -1,0 +1,55 @@
+services:
+  app:
+    # build construye la imagen local de la app para usarla en modo desarrollo.
+    build:
+      context: ./app-db
+      dockerfile: Dockerfile
+    container_name: dev-app
+    # ports expone la app en un puerto distinto del host para este escenario.
+    ports:
+      - "5002:5000"
+    # env_file carga variables desde un archivo externo para no dejarlas inline.
+    env_file:
+      - ./dev/.env
+    # volumes monta el codigo local dentro del contenedor para reflejar cambios al instante.
+    volumes:
+      - ./app-db:/app
+    # command deja explicito el proceso de arranque usado en el entorno de desarrollo.
+    command: ["python", "app.py"]
+    # depends_on espera a que la base este lista antes de iniciar la app.
+    depends_on:
+      db:
+        condition: service_healthy
+    # healthcheck valida que la app responde en su endpoint de salud.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  db:
+    # db ofrece una base aislada para el entorno de desarrollo.
+    image: postgres:17.10-alpine@sha256:5a6fcbc5d93831991d2386fa634509b3c49a1ac5ffb70c13c2322840f821d7e7
+    container_name: dev-postgres
+    # env_file reutiliza el mismo archivo de variables para credenciales y nombres.
+    env_file: 
+      - ./dev/.env
+    # ports publica la base en otro puerto para no chocar con otros ejemplos.
+    ports:
+      - "5434:5432"
+    # volumes persiste datos locales del entorno de desarrollo.
+    volumes:
+      - dev_db_data:/var/lib/postgresql/data
+    # healthcheck usa pg_isready para saber cuando la base ya esta operativa.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U practice_user -d practice_db"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+
+volumes:
+  # dev_db_data es el volumen donde se guarda la base del escenario dev.
+  dev_db_data:

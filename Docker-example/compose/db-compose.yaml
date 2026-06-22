@@ -1,0 +1,40 @@
+services:
+  db:
+    # image usa Postgres fijado por digest para evitar cambios inesperados de version.
+    image: postgres:17.10-alpine@sha256:5a6fcbc5d93831991d2386fa634509b3c49a1ac5ffb70c13c2322840f821d7e7
+    # container_name ayuda a identificar el servicio al usar logs o exec.
+    container_name: basic-postgres
+    # environment define la base, el usuario y la contraseña iniciales de Postgres.
+    environment:
+      POSTGRES_DB: practice_db
+      POSTGRES_USER: practice_user
+      POSTGRES_PASSWORD: practice_pass
+    # ports publica Postgres en el host para poder conectarte desde fuera del compose.
+    ports:
+      - "5432:5432"
+    # volumes persiste los datos para que no se pierdan al recrear el contenedor.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # healthcheck comprueba que Postgres acepta conexiones con pg_isready.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U practice_user -d practice_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  adminer:
+    # Adminer actua como interfaz web para administrar la base de datos.
+    image: adminer:4@sha256:98c8a8b77e04674abaca79b6f24bd482525af489b66aab43a6d0c61fe15fded9
+    container_name: basic-adminer
+    # ports expone Adminer en localhost:8081.
+    ports:
+      - "8081:8080"
+    # depends_on espera a que Postgres este sano antes de arrancar Adminer.
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  # postgres_data es el volumen nombrado donde Postgres guarda su informacion.
+  postgres_data:

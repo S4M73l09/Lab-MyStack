@@ -1,0 +1,16 @@
+services:
+  web:
+    # image fija la imagen exacta usando tag + digest para que el ejemplo sea reproducible.
+    image: nginx:1.30.2-alpine@sha256:83902b81d5d0ebfa863977a4ae2260c18bee6817fae0e534c57cab0c1d584a64
+    # container_name asigna un nombre facil de recordar al contenedor.
+    container_name: basic-nginx
+    # ports expone Nginx al host usando localhost:8080 -> contenedor:80.
+    ports:
+      - "8080:80"
+    # healthcheck valida que el servicio HTTP responde dentro del contenedor.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:80 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

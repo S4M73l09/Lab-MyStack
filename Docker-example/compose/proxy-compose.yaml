@@ -1,0 +1,71 @@
+services:
+  app:
+    # build reutiliza la imagen local de la aplicacion para colocarla detras del proxy.
+    build:
+      context: ./app-db
+      dockerfile: Dockerfile
+    container_name: proxy-app
+    # environment pasa a la app las credenciales necesarias para conectarse a Postgres.
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      POSTGRES_DB: practice_db
+      POSTGRES_USER: practice_user
+      POSTGRES_PASSWORD: practice_pass
+    # depends_on espera a que la base este operativa antes de marcar la app lista.
+    depends_on:
+      db:
+        condition: service_healthy
+    # healthcheck comprueba que la app responde y puede alcanzar la base de datos.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  db:
+    # db actua como almacenamiento interno de la app y no necesita publicarse al host.
+    image: postgres:17.10-alpine@sha256:5a6fcbc5d93831991d2386fa634509b3c49a1ac5ffb70c13c2322840f821d7e7
+    container_name: proxy-postgres
+    # environment define la configuracion inicial de la base.
+    environment:
+      POSTGRES_DB: practice_db
+      POSTGRES_USER: practice_user
+      POSTGRES_PASSWORD: practice_pass
+    # volumes persiste datos entre reinicios o recreaciones del servicio.
+    volumes:
+      - proxy_db_data:/var/lib/postgresql/data
+    # healthcheck usa pg_isready para saber cuando la base esta lista.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U practice_user -d practice_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  nginx:
+    # nginx es la entrada publica del ejemplo y reenvia peticiones hacia la app interna.
+    image: nginx:1.30.2-alpine@sha256:83902b81d5d0ebfa863977a4ae2260c18bee6817fae0e534c57cab0c1d584a64
+    container_name: proxy-nginx
+    # ports publica solo el proxy, manteniendo app y db dentro de la red interna.
+    ports:
+      - "8080:80"
+    # volumes monta la configuracion de Nginx desde un archivo externo.
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    # depends_on espera a que la app este sana antes de levantar el proxy.
+    depends_on:
+      app:
+        condition: service_healthy
+    # healthcheck valida que Nginx responde por HTTP dentro del contenedor.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:80 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  # proxy_db_data es el volumen dedicado a la base de este escenario.
+  proxy_db_data:

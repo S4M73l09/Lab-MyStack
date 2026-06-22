@@ -1,0 +1,92 @@
+services:
+    # Servicio Nginx
+  nginx:
+    # Imagen usando su tag + Digest para version inmutable
+    image: nginx:1.30.2-alpine@sha256:83902b81d5d0ebfa863977a4ae2260c18bee6817fae0e534c57cab0c1d584a64
+    # Nombre del contenedor del servicio
+    container_name: multi-nginx
+    # Puertos en los que se alojara el servicio
+    ports:
+      - "8083:80"
+    # El volumen hace que los datos persistan
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    # Espera a que el servicio app este levantado y saludable
+    depends_on:
+      app:
+        condition: service_healthy
+    # La red que alojara dicho servicio, en este caso la red sera la frontend
+    networks:
+      - frontend
+    # Valida que el servicio Nginx responda al endpoint de salud
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:80 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    
+    # Servicio de la app
+  app:
+    build:
+    # Donde se aloja la carpeta necesaria del dockerfile
+      context: ./app-db
+    # Apunta al Dockerfile de dicha carpeta
+      dockerfile: Dockerfile
+    # Nombre del contenedor
+    container_name: multi-app
+    # Variables necesarias para la base de datos alojada 
+    environment: 
+      DB_HOST: db
+      DB_PORT: "5432"
+      POSTGRES_DB: practice_db
+      POSTGRES_USER: practice_user
+      POSTGRES_PASSWORD: practice_pass
+    # Espera a que el servicio db este levantado y saludable
+    depends_on:
+      db:
+        condition: service_healthy
+    # Estara alojado en ambas redes para asi conectarse a ambos servicios
+    networks:
+      - frontend
+      - backend
+    # Valida que la app responda al endpoint de salud
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  db:
+    # Imagen con Tag + Digest para version inmutable
+    image: postgres:17.10-alpine@sha256:5a6fcbc5d93831991d2386fa634509b3c49a1ac5ffb70c13c2322840f821d7e7
+    # Nombre del contenedor
+    container_name: multi-postgres
+    # variables usadas para el acceso de la base de datos
+    environment:
+      POSTGRES_DB: practice_db
+      POSTGRES_USER: practice_user
+      POSTGRES_PASSWORD: practice_pass
+    # Volumen para que los datos persistan
+    volumes:
+      - multi_db_data:/var/lib/postgresql/data
+    # Red donde se alojara el servicio de Postgres
+    networks:
+      - backend
+    # Validacion para verificar que las variables estan correctas
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U practice_user -d practice_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+# Volumen donde se guarda los servicios y la app
+volumes:
+  multi_db_data:
+# Indica las redes creadas en este compose para uso general de este
+networks:
+  frontend:
+  backend:
+

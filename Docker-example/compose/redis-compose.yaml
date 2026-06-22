@@ -1,0 +1,36 @@
+services:
+  redis:
+    # image fija una version concreta de Redis usando tag + digest.
+    image: redis:8.0.3-alpine@sha256:69ab64c16a669ef12999ce161a3965ccc6573566c24e44c3645a6b051722fb04
+    container_name: basic-redis
+    # ports publica Redis en localhost:6379.
+    ports:
+      - "6379:6379"
+    # volumes guarda datos persistentes y monta el archivo redis.conf como solo lectura.
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    # command arranca Redis con su configuracion y una contraseña para autenticacion.
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--requirepass", "practice_redis_pass"]
+    # healthcheck valida que Redis responde con PONG.
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a practice_redis_pass ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis-client:
+    # redis-client es un contenedor auxiliar para probar la conexion desde otro servicio.
+    image: redis:8.0.3-alpine@sha256:69ab64c16a669ef12999ce161a3965ccc6573566c24e44c3645a6b051722fb04
+    container_name: basic-redis-client
+    # depends_on espera a que Redis este sano antes de ejecutar el ping autenticado.
+    depends_on:
+      redis:
+        condition: service_healthy
+    # entrypoint ejecuta una comprobacion de red interna y deja el contenedor vivo para pruebas.
+    entrypoint: ["sh", "-c", "redis-cli -h redis -a practice_redis_pass ping && sleep 3600"]
+
+volumes:
+  # redis_data persiste datos de Redis fuera del contenedor.
+  redis_data:

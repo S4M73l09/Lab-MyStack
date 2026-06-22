@@ -1,0 +1,89 @@
+services:
+  app:
+    # app expone la parte web mientras delega tareas de fondo al worker mediante Redis.
+    build:
+      context: ./app-db
+      dockerfile: Dockerfile
+    container_name: worker-app
+    # ports publica la app en un puerto distinto para no chocar con otros ejemplos.
+    ports:
+      - "5001:5000"
+    # environment entrega a la app la configuracion de Postgres y Redis.
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      POSTGRES_DB: practice_db
+      POSTGRES_USER: practice_user
+      POSTGRES_PASSWORD: practice_pass
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: practice_redis_pass
+    # depends_on espera a que tanto la base como Redis esten listos.
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    # healthcheck verifica el endpoint de salud de la app.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  worker:
+    # worker reutiliza la misma imagen pero ejecuta worker.py para procesar tareas en segundo plano.
+    build:
+      context: ./app-db
+      dockerfile: Dockerfile
+    container_name: background-worker
+    # command sobrescribe el CMD del Dockerfile para arrancar el proceso de fondo.
+    command: ["python", "worker.py"]
+    # environment entrega al worker la ubicacion y contraseña de Redis.
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: practice_redis_pass
+    # depends_on evita que el worker intente consumir tareas antes de tiempo.
+    depends_on:
+      redis:
+        condition: service_healthy
+      
+  db:
+    # db persiste la informacion relacional usada por la app web.
+    image: postgres:17.10-alpine@sha256:5a6fcbc5d93831991d2386fa634509b3c49a1ac5ffb70c13c2322840f821d7e7
+    container_name: worker-postgres
+    # environment define la base y credenciales que usara la app.
+    environment:
+      POSTGRES_DB: practice_db
+      POSTGRES_USER: practice_user
+      POSTGRES_PASSWORD: practice_pass
+    # volumes guarda el estado de Postgres fuera del contenedor.
+    volumes:
+      - worker_db_data:/var/lib/postgresql/data
+    # healthcheck espera a que la base este lista antes de liberar dependencias.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U practice_user -d practice_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    # redis actua como cola simple o broker para las tareas del worker.
+    image: redis:8.0.3-alpine@sha256:69ab64c16a669ef12999ce161a3965ccc6573566c24e44c3645a6b051722fb04
+    container_name: worker-redis
+    # command arranca Redis con autenticacion obligatoria.
+    command: ["redis-server", "--requirepass", "practice_redis_pass"]
+    # healthcheck comprueba que Redis responde correctamente al ping autenticado.
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a practice_redis_pass ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  # worker_db_data persiste la base de datos de este escenario.
+  worker_db_data:

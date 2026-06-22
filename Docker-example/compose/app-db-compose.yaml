@@ -1,0 +1,69 @@
+services:
+  app:
+    # build indica que esta imagen se construye localmente usando el Dockerfile de app-db.
+    build:
+      # context marca la carpeta que Docker usa como contexto de build.
+      context: app-db
+      # dockerfile indica que archivo usar para construir la imagen.
+      dockerfile: Dockerfile
+    container_name: basic-app-db
+    # ports publica la app en localhost:5000 -> contenedor:5000.
+    ports:
+      - "5000:5000"
+    # environment pasa a la app los datos de conexion hacia Postgres.
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      POSTGRES_DB: practice_db
+      POSTGRES_USER: practice_user
+      POSTGRES_PASSWORD: practice_pass
+    # depends_on retrasa el arranque completo hasta que la base este sana.
+    depends_on:
+      db:
+        condition: service_healthy
+    # healthcheck llama al endpoint /health para verificar app + conexion a base.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  db:
+    # db levanta Postgres como backend persistente para la aplicacion.
+    image: postgres:17.10-alpine@sha256:5a6fcbc5d93831991d2386fa634509b3c49a1ac5ffb70c13c2322840f821d7e7
+    container_name: basic-postgres-app
+    # environment inicializa base, usuario y contraseña.
+    environment:
+      POSTGRES_DB: practice_db
+      POSTGRES_USER: practice_user
+      POSTGRES_PASSWORD: practice_pass
+    # ports expone Postgres en otro puerto del host para no chocar con otros ejemplos.
+    ports:
+      - "5433:5432"
+    # volumes guarda los datos de la base fuera del ciclo de vida del contenedor.
+    volumes:
+      - app_db_data:/var/lib/postgresql/data
+    # healthcheck verifica que Postgres ya acepta conexiones.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U practice_user -d practice_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  adminer:
+    # Adminer ofrece una interfaz web para conectarse a la base.
+    image: adminer:4@sha256:98c8a8b77e04674abaca79b6f24bd482525af489b66aab43a6d0c61fe15fded9
+    container_name: basic-adminer-app
+    # ports expone Adminer en localhost:8082.
+    ports:
+      - "8082:8080"
+    # depends_on evita que Adminer arranque antes de tener una base disponible.
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  # app_db_data persiste el almacenamiento de Postgres para este ejemplo.
+  app_db_data:
