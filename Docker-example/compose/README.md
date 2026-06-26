@@ -106,6 +106,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
   - Verificar usuario y contraseña
 </details>
 
+
 [app-db-compose.yaml](app-db-compose.yaml)  
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
@@ -130,6 +131,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
   - Comprender la red interna de los contenedores para su comunicacion
   - Ver una composicion multiservicio mas cercana a un caso real
 </details>
+
 
 [redis-compose.yaml](redis-compose.yaml)
 <details>
@@ -194,6 +196,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
   - la contraseña configurada es valida
 </details>
 
+
 [proxy-compose.yaml](proxy-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
@@ -216,6 +219,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 
   En este ejemplo tambien se usa un archivo de configuracion externo a este `compose.yaml` el cual puedes ver su funcionamiento [aqui](proxy/)
 </details>
+
 
 [worker-compose.yaml](worker-compose.yaml)
 <details>
@@ -248,6 +252,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
   Aqui se puede ver el archivo `python` usando en el `compose.yaml` [worker.py](app-db/worker.py) 
 </details>
 
+
 [dev-compose.yaml](dev-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
@@ -271,6 +276,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 
   Puedes ver el archivo [`.env`](app-db/.env) 
 </details>
+
 
 [multi-network-compose.yaml](multi-network-compose.yaml)
 <details>
@@ -297,6 +303,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
   - entender que servicio puede hablar con quien
 </details>
 
+
 [secrets-config-compose.yaml](secrets-config-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
@@ -315,6 +322,55 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
   - se muestra diferencia entre "configuracion" y "secreto"
   - nos prepara mentalmente para herramientas futuras como Vault, SOPS, Kubernetes Secrets o AWS/GCP/Azure y sus secrets managers.
 </details>
+
+
+[observability-compose.yaml](observability-compose.yaml)
+<details>
+  <summary><strong> Explicacion de este compose </strong></summary>
+
+  En este `compose.yaml` especifico se usa dos servicios de monitorizacion, se usa `Prometheus` y `Grafana`.
+
+  ***`Prometheus`*** se usa para registrar las metricas reales del contenedor donde se apunta, ademas de usar un archivo de configuracion necesario `prometheus.yml`  
+
+  ***`Grafana`*** se usa para la visualizacion de las metricas registradas por el servicio de Promteheus.
+
+  En este ejemplo se muestra una forma de añadir monitorizacion real en una plantilla `compose.yaml`.
+
+  Que hace:
+  - Levanta dos contenedores que registra y visualiza metricas reales
+  - `Prometheus` recoge metricas
+  - `grafana` las visualiza en dashboards
+  - el archivo de configuracion de `Prometheus` le dice qué objetivo debe monitorizar
+
+  Puedes encontrar el archivo de configuracion [aqui](observability)
+
+  Objetivo educativo:
+  - Se muestra como se despliega herramientas de observabilidad
+  - Muestra diferencia entre recolección (`prometheus`) y visualización (`grafana`)
+  - Uso de configuracion externa con volumen
+  - persistencia para datos de métricas y dashboards
+
+  Complejidad añadida:
+
+  Este ejemplo no solo levanta `Prometheus` y `Grafana`, tambien añade validaciones de salud y credenciales iniciales para que el escenario se parezca mas a un despliegue real.
+
+  Se añade:
+  - `healthcheck`en `Prometheus`
+      - Comprueba que el servicio responde correctamente en `/-/healthy`.  
+  - `healthcheck` en `Grafana`  
+      - Comprueba que la API de salud responde en `/api/health`.  
+  - Variables de entorno de admin en `Grafana`  
+      - Definen el usuario y contraseña iniciales para acceder al panel web.  
+
+  Valor educativo:
+
+  - Entender como validar que una herramienta de observabilidad esta realmente operativa
+  - Ver como se inicializa el acceso de un servicio web como `Grafana`
+  - Aumentar la complejidad del compose sin perder claridad  
+</details>  
+
+
+
 
 ---
 
