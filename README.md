@@ -1,7 +1,6 @@
 # Lab-MyStack
 
-Este repositorio has sido creado para servir como un entorno educativo para el conocimiento de herramientas `DevOps/CI/CD` y 
-el uso de mas herramientas.
+Este repositorio has sido creado para servir como un entorno educativo para el conocimiento de herramientas `DevOps/CI/CD` y el uso de mas herramientas.
 
 Cada apartado contendra un README.md explicativo que mostrara el uso real de dichos ejemplos y explicaciones de los comandos, variables, rutas... Generando una documentacion clara y directa.
 
@@ -19,6 +18,12 @@ En el siguiente indice se mostrara los contenidos futuros para que puedas selecc
 - [Docker](Docker-example)
    - [compose](Docker-example/compose)
      - [app-db](Docker-example/compose/app-db)
+     - [dev](Docker-example/compose/dev)
+     - [observability](Docker-example/compose/observability)
+     - [proxy](Docker-example/compose/proxy)
+     - [redis](Docker-example/compose/redis)
+     - [secrets](Docker-example/compose/secrets)
+     - [README](Docker-example/compose/README.md)
 - [Documentaciones oficiales](#documentaciones-oficiales)
 
 ---
@@ -33,6 +38,7 @@ Los workflows de **Github Actions** son creados en la misma ruta de `.github/wor
 
 - Estructura general en los workflows
     - `trigger(on)` → `jobs` → `setup` → `install`→ `validate/test`
+
 ### Por que se sigue este orden
 
 - `trigger`:Define cuando debe ejecutarse el workflow, por ejemplo en `push`, `pull_request` o manualmente `workflow_dispatch`
@@ -53,9 +59,9 @@ Los workflows de **Github Actions** son creados en la misma ruta de `.github/wor
   - Se usa cuando el proyecto necesita preparar un entorno concreto, instalar dependencias y ejecutar validaciones reales sobre el codigo.
 
 - Pipeline de Terraform:
-  - Se usa para validar y desplegar infraestructura como codigo. Normalmente incluye autenticacion con cloud, `fmt`, `validate`, `plan`y en algunos casos `apply`.
+  - Se usa para validar y desplegar infraestructura como codigo. Normalmente incluye autenticacion con cloud, `fmt`, `validate`, `plan` y en algunos casos `apply`.
 
-    > Pequeña nota aclaratoria de que cada inicio de un step, debe contener el checkout y el inicio con OIDC de cualquier provider.
+  > Pequeña nota aclaratoria de que cada inicio de un step, debe contener el checkout y el inicio con OIDC de cualquier provider.
 
 - Pipeline de Ansible:
   - Se usa para automatizar configuraciones o aprovisionamiento. Puede generar inventario, ejecutar playbooks y guardar artefactos de salida.
@@ -100,6 +106,8 @@ En este apartado se mostraran ejemplos de `pipelines` basicos donde se muestran 
   - Validar que el pipeline corre correctamente
 </details>
 
+---
+
 Este siguiente `pipeline` usa codigo de `Python` alojado en la carpeta [App_python_basic](/App_python_basic).
 
 Puedes ver de que se encarga dicho codigo en su [`README.md`](/App_python_basic).
@@ -126,9 +134,36 @@ Puedes ver de que se encarga dicho codigo en su [`README.md`](/App_python_basic)
   - Entender la estructura con Python
   - Ver como funciona
   - Validar que el pipeline corre perfectamente y el codigo de python igual
-  </details>
+</details>
 
-  # Documentaciones oficiales
+---
+
+[`.github/workflows/Basic-image-docker.yaml`](./.github/workflows/Basic-image-docker.yaml)
+
+<details>
+  <summary><strong>Explicacion de Basic-image-docker.yaml</strong></summary>
+
+  Este workflow se ejecuta en:
+  - `push` a la rama main
+  - `pull_request`
+
+  Qué hace:
+  1. Utiliza permiso de escritura y lectura
+  2. Añade concurrency para que solo se pueda activar un run
+  3. Hace checkout del repositorio
+  4. Construye una imagen Docker utilizando el compose de `Docker-example/compose/app-db-compose.yaml`
+  5. Muestra los contenedores ejecutandose
+  6. Espera para verficar la salud de dichos contenedores
+  7. Muestra log sobre la verificacion del punto anterior
+  8. Despues de la verificacion, los contenedores se eliminan
+
+  Objetivo educativo:
+  - Entender el uso de CI/CD para `compose.yaml`
+  - Ver como funciona
+  - Validar que el pipeline se ejecuta de manera satisfactoria
+</details>
+
+# Documentaciones oficiales
 
   Aqui encontraras la documentacion de cada herramienta usada en este repositorio educativo.
 
@@ -141,7 +176,7 @@ Puedes ver de que se encarga dicho codigo en su [`README.md`](/App_python_basic)
 - [☸️ Kubernetes]
 - [🛡️ Trivy]
 - [✅ Checkov]
-- [🐍 Python]
+- [🐍 Python](https://docs.python.org/es/3/)
 
 
 ---
