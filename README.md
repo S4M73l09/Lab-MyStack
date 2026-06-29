@@ -10,6 +10,8 @@ En este README se mostrara enlaces a todos los recursos oficiales al final de es
 
 En el siguiente indice se mostrara los contenidos futuros para que puedas seleccionar lo que mas quieras conocer.
 
+Cada apartado esta separado del ***README.md*** principal, para asi no mezclar explicaciones y que quede todo mejor cohesionado.
+
 ## Indice
 
 - [Pipelines Basicos](#pipelines-basicos)
@@ -24,6 +26,7 @@ En el siguiente indice se mostrara los contenidos futuros para que puedas selecc
      - [redis](Docker-example/compose/redis)
      - [secrets](Docker-example/compose/secrets)
      - [README](Docker-example/compose/README.md)
+- [DevSecOps-example](DevSecOps-example)
 - [Documentaciones oficiales](#documentaciones-oficiales)
 
 ---
@@ -174,7 +177,7 @@ Puedes ver de que se encarga dicho codigo en su [`README.md`](/App_python_basic)
 - [☁️ Azure](https://learn.microsoft.com/es-es/azure/?product=popular)
 - [☁️ Google Cloud](https://docs.cloud.google.com/docs?hl=es-419)
 - [☸️ Kubernetes]
-- [🛡️ Trivy]
+- [🛡️ Trivy](https://trivy.dev/docs/latest/getting-started/installation/)
 - [✅ Checkov]
 - [🐍 Python](https://docs.python.org/es/3/)
 
