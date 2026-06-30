@@ -23,6 +23,8 @@ Todos los ejemplos son didacticos y no describen realmente el funcionamiento rea
       - [github-actions](OPA-Conftest/github-actions)
   - [TFLint](#tflint)
   - [OIDC](#oidc)
+- [Runtime y su uso](#runtime-y-su-uso)
+- [Documentacion oficial](#documentacion-oficial)
 
 
 ---
