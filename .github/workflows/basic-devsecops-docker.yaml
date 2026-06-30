@@ -1,0 +1,87 @@
+name: basic-devsecops-docker
+
+# Se activa el pipeline al pushear a la rama main y haciendo PR
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+# permisos de escritura para eventos de seguridad y lectura
+permissions:
+  contents: read
+  security-events: write
+
+# Se añade concurrencia para que los pipelines no se solapen
+concurrency:
+  group: DevSecOps-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+# Los diferentes jobs
+jobs:
+  docker-devsecops:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Revisa el codigo del repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Valida el compose
+      - name: Validate Docker Compose file
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml config
+
+      # Ejecuta Checkov contra el compose de app-db-compose.yaml
+      - name: Run Checkov on compose
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          file: Docker-example/compose/app-db-compose.yaml
+          quiet: true
+
+      # Construye la imagen Docker de app-db-compose.yaml
+      - name: Build Docker image
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml build
+
+      # ejecuta Trivy para escanear la imagen del Dockerfile
+      - name: Run Trivy image scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: basic-app-db:latest
+          format: table
+          output: trivy-report.txt
+          exit-code: '0'
+          severity: HIGH,CRITICAL
+
+      # Sube un Artifact .txt para descargar para ver las nulverabilidades, asi evitamos que trivy pueda cancelar el job pero a la vez nos permite ver con claridad
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.txt
+
+      # Inicia los servicios del compose
+      - name: Start services
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml up -d
+
+      # verifica la salud del contenedor
+      - name: Verify app health
+        run: |
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:5000/health; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "App healthcheck failed"
+          exit 1
+
+      # Muestra los logs si falla
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml logs
+
+      # limpia todo los contenedores y borra los volumenes
+      - name: Cleanup
+        if: always()
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml down -v
