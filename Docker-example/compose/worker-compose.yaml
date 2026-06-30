@@ -1,5 +1,6 @@
 services:
   app:
+    image: basic-app-db:latest
     # app expone la parte web mientras delega tareas de fondo al worker mediante Redis.
     build:
       context: ./app-db

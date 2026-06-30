@@ -1,5 +1,6 @@
 services:
   app:
+    image: basic-app-db:latest
     # build reutiliza la imagen local de la aplicacion para colocarla detras del proxy.
     build:
       context: ./app-db

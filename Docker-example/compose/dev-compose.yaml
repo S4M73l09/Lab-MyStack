@@ -1,5 +1,6 @@
 services:
   app:
+    image: basic-app-db:latest
     # build construye la imagen local de la app para usarla en modo desarrollo.
     build:
       context: ./app-db

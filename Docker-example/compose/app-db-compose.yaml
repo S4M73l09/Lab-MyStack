@@ -1,5 +1,6 @@
 services:
   app:
+    image: basic-app-db:latest
     # build indica que esta imagen se construye localmente usando el Dockerfile de app-db.
     build:
       # context marca la carpeta que Docker usa como contexto de build.

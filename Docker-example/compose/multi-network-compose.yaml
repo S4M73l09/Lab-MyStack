@@ -28,6 +28,7 @@ services:
     
     # Servicio de la app
   app:
+    image: basic-app-db:latest
     build:
     # Donde se aloja la carpeta necesaria del dockerfile
       context: ./app-db
