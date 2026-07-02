@@ -53,7 +53,7 @@ jobs:
           exit-code: '0'
           severity: HIGH,CRITICAL
 
-      # Sube un Artifact .txt para descargar para ver las nulverabilidades, asi evitamos que trivy pueda cancelar el job pero a la vez nos permite ver con claridad
+      # Sube un Artifact .txt para descargar y ver las nulverabilidades, asi evitamos que trivy pueda cancelar el job pero a la vez nos permite ver con claridad
       - name: Upload Trivy report
         uses: actions/upload-artifact@v4
         with:
