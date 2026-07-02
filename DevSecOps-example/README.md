@@ -24,6 +24,7 @@ Todos los ejemplos son didacticos y no describen realmente el funcionamiento rea
   - [TFLint](#tflint)
   - [OIDC](#oidc)
 - [Runtime y su uso](#runtime-y-su-uso)
+- [Ejemplos y usos](#ejemplos-y-usos-de-dichas-herramientas-en-pipelines)
 - [Documentacion oficial](#documentacion-oficial)
 
 
@@ -217,6 +218,42 @@ Esto implica:
 El objetivo es minimizar la superficie de exposicion y reforzar la seguridad del flujo de `CI/CD`.
 
 ---
+
+# Ejemplos y uso de dichas Herramientas en Pipelines
+
+Aqui se muestra el uso de dichas herramientas en los pipelines de CI/CD, permitiendonos practicar y visualizar como funciona cada una.
+
+## Pipelines DevSecOps
+
+***Pipeline basico de Docker con DevSecOps***
+
+[`.github/workflows/basic-devsecops-docker.yaml`](../.github/workflows/basic-devsecops-docker.yaml)
+
+<details>
+  <summary><strong> Explicacion del pipeline</strong></summary>
+
+  Este pipeline se ejecuta en:
+  - `push` a la rama `main`
+  - `pull_request`
+  - `workflow_dispatch`
+
+  Que hace:
+  1. Hace `checkout` del repositorio
+  2. Valida el archivo `compose` con `docker compose config`
+  3. Ejecuta `Checkov` contra `app-db-compose.yaml`
+  4. Construye la imagen Docker de la aplicacion
+  5. Ejecuta `Trivy` para escanear la imagen construida
+  6. Guarda el resultado de `Trivy` en un artifact descargable
+  7. Levanta los servicios del compose
+  8. Verifica la salud de la aplicacion mediante `/health`
+  9. Muestra logs si algo falla
+  10. Elimina contenedores y volumenes al finalizar
+
+  Objetivo educativo:
+  - ver como integrar validacion de configuracion e imagen en un pipeline real
+  - entender el orden entre validacion, build, escaneo y comprobacion de salud
+  - mostrar un flujo `DevSecOps` sencillo pero cercano a un caso real
+</details>
 
 # Documentacion oficial
 
