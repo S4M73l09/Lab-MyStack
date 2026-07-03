@@ -88,7 +88,7 @@ Los workflows de **Github Actions** son creados en la misma ruta de `.github/wor
 
 En este apartado se mostraran ejemplos de `pipelines` basicos donde se muestran su uso:
 
-[`.github/workflows/Basic-ci.yaml`](./.github/workflows/Basic-ci.yaml)
+### [`.github/workflows/Basic-ci.yaml`](./.github/workflows/Basic-ci.yaml)
 
 <details>
   <summary><strong>Explicacion de Basic CI</strong></summary>
@@ -109,13 +109,13 @@ En este apartado se mostraran ejemplos de `pipelines` basicos donde se muestran 
   - Validar que el pipeline corre correctamente
 </details>
 
----
+
 
 Este siguiente `pipeline` usa codigo de `Python` alojado en la carpeta [App_python_basic](/App_python_basic).
 
 Puedes ver de que se encarga dicho codigo en su [`README.md`](/App_python_basic).
 
-[`.github/workflows/Basic-ci-python.yaml`](./.github/workflows/Basic-ci-python.yaml)
+### [`.github/workflows/Basic-ci-python.yaml`](./.github/workflows/Basic-ci-python.yaml)
 
 <details>
   <summary><strong>Explicacion de Basic-ci-python</strong></summary>
@@ -139,9 +139,9 @@ Puedes ver de que se encarga dicho codigo en su [`README.md`](/App_python_basic)
   - Validar que el pipeline corre perfectamente y el codigo de python igual
 </details>
 
----
 
-[`.github/workflows/Basic-image-docker.yaml`](./.github/workflows/Basic-image-docker.yaml)
+
+### [`.github/workflows/Basic-image-docker.yaml`](./.github/workflows/Basic-image-docker.yaml)
 
 <details>
   <summary><strong>Explicacion de Basic-image-docker.yaml</strong></summary>
@@ -166,6 +166,8 @@ Puedes ver de que se encarga dicho codigo en su [`README.md`](/App_python_basic)
   - Validar que el pipeline se ejecuta de manera satisfactoria
 </details>
 
+
+
 # Documentaciones oficiales
 
   Aqui encontraras la documentacion de cada herramienta usada en este repositorio educativo.
@@ -178,7 +180,7 @@ Puedes ver de que se encarga dicho codigo en su [`README.md`](/App_python_basic)
 - [☁️ Google Cloud](https://docs.cloud.google.com/docs?hl=es-419)
 - [☸️ Kubernetes]
 - [🛡️ Trivy](https://trivy.dev/docs/latest/getting-started/installation/)
-- [✅ Checkov]
+- [✅ Checkov](https://www.checkov.io/1.Welcome/Quick%20Start.html)
 - [🐍 Python](https://docs.python.org/es/3/)
 
 
