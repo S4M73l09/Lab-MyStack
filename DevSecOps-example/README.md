@@ -20,6 +20,7 @@ Todos los ejemplos son didacticos y no describen realmente el funcionamiento rea
   - [Checkov](#checkov)
   - [OPA / Conftest](#opa--conftest)
     - [OPA-Conftest](OPA-Conftest)
+      - [docker-compose](OPA-Conftest/docker-compose)
       - [github-actions](OPA-Conftest/github-actions)
   - [TFLint](#tflint)
   - [OIDC](#oidc)
@@ -161,9 +162,9 @@ Las policies de ejemplo validan:
 
 Probar un compose contra las policies:
 ```bash
-conftest test Docker-example/compose/app-db-compose.yaml --policy DevSecOps-example/OPA-Conftest
+conftest test Docker-example/compose/app-db-compose.yaml --policy DevSecOps-example/OPA-Conftest/docker-compose
 ```
-Puedes encontrar las `policies.rego` en la carpeta de [OPA-Conftest](OPA-Conftest).
+Puedes encontrar las `policies.rego` de `docker compose` en la carpeta de [OPA-Conftest/docker-compose](OPA-Conftest/docker-compose).
 
 ## TFLint
 
@@ -305,4 +306,3 @@ Aqui se muestra el uso de dichas herramientas en los pipelines de CI/CD, permiti
      - Gcloud
        - [OIDC para github](https://docs.github.com/es/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-google-cloud-platform)  
        - [OIDC para gitlab](https://docs.gitlab.com/ci/cloud_services/google_cloud/)  
-

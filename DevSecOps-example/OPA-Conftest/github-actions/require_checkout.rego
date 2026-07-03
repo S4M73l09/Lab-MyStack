@@ -9,5 +9,5 @@ deny[msg] {
 
 has_checkout(steps) {
   some i
-  steps[i].uses == "actions/checkout@v4"
+  steps[i].uses == "actions/checkout@"
 }

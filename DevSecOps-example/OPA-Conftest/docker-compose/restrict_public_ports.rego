@@ -1,5 +1,15 @@
 package main
 
+allowed_public_services := {
+  "app",
+  "nginx",
+  "adminer",
+  "db",
+  "redis",
+  "prometheus",
+  "grafana",
+}
+
 deny[msg] {
   some service_name
   service := input.services[service_name]

@@ -42,7 +42,7 @@ jobs:
           sudo mv conftest /usr/local/bin/conftest
 
       - name: Run Conftest policies on compose
-        run: conftest test Docker-example/compose/app-db-compose.yaml --policy DevSecOps-example/OPA-Conftest
+        run: conftest test Docker-example/compose/app-db-compose.yaml --policy DevSecOps-example/OPA-Conftest/docker-compose
 
     # Se construye la imagen de Docker
       - name: Build Docker image

@@ -4,7 +4,7 @@ En esta carpeta se muestran policies `.rego` orientadas a validar workflows de `
 
 ## Que valida cada archivo `.rego`
 
-[`require_checkout.rego`](./require_checkout.rego)
+### [`require_checkout.rego`](./require_checkout.rego)
 <details>
   <summary><strong>Explicacion de la policy</strong></summary>
 
@@ -13,14 +13,14 @@ En esta carpeta se muestran policies `.rego` orientadas a validar workflows de `
   Que hace:
   1. Recorre los jobs del workflow
   2. Revisa la lista de `steps`
-  3. Busca el uso de `actions/checkout@v4`
+  3. Busca el uso de `actions/checkout@`
   4. Si no lo encuentra, genera un mensaje `deny`
 
   Objetivo educativo:
   - reforzar el uso correcto del checkout en workflows que necesitan acceder al repositorio
 </details>
 
-[`require_permissions.rego`](./require_permissions.rego)
+### [`require_permissions.rego`](./require_permissions.rego)
 <details>
   <summary><strong>Explicacion de la policy</strong></summary>
 
@@ -36,7 +36,7 @@ En esta carpeta se muestran policies `.rego` orientadas a validar workflows de `
   - reforzar el principio de minimo privilegio
 </details>
 
-[`require_cleanup_step.rego`](./require_cleanup_step.rego)
+### [`require_cleanup_step.rego`](./require_cleanup_step.rego)
 <details>
   <summary><strong>Explicacion de la policy</strong></summary>
 
@@ -58,7 +58,7 @@ En esta carpeta se muestran policies `.rego` orientadas a validar workflows de `
 Probar un workflow contra estas policies:
 
 ```bash
-conftest test .github/workflows/Basic-image-docker.yaml --policy DevSecOps-example/OPA-Conftest/github-actions
+conftest test .github/workflows/advanced-devsecops-docker.yaml --policy DevSecOps-example/OPA-Conftest/github-actions
 ```
 
 ## Objetivo general

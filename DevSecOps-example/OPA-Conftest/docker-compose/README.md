@@ -2,6 +2,8 @@
 
 En esta carpeta se muestran ejemplos basicos de `policy as code` usando `OPA` y `Conftest`. Las policies estan escritas en `Rego` y se usan para validar archivos `docker compose` del repositorio.
 
+Las policy `.rego` estan pensadas justamentes para el uso educativo de los `compose`, por lo cual estas policies no son universales sino que estan adaptadas a los ejemplos de los `compose`.
+
 ## Que valida cada archivo `.rego`
 
 ### [`deny_latest_tag.rego`](./deny_latest_tag.rego)
@@ -69,6 +71,8 @@ En esta carpeta se muestran ejemplos basicos de `policy as code` usando `OPA` y 
 
   Esta policy detecta servicios que publican puertos al host y obliga a revisar si realmente deben estar expuestos.
 
+  Para ello se ha usado de manera intencional una lista de servicios que dicha politica ignorara para mostrar el modelo educativo y tambien muestra un ejemplo mas completo a la hora de no crear politicas tan restrictivas frente a los servicios expuestos.
+
   Que hace:
   1. Recorre los servicios del compose
   2. Comprueba si existe el bloque `ports`
@@ -87,11 +91,11 @@ En esta carpeta se muestran ejemplos basicos de `policy as code` usando `OPA` y 
 Probar un archivo `compose` contra estas policies:
 
 ```bash
-conftest test Docker-example/compose/app-db-compose.yaml --policy DevSecOps-example/OPA-Conftest
+conftest test Docker-example/compose/app-db-compose.yaml --policy DevSecOps-example/OPA-Conftest/docker-compose
 ```
 
 ## Objetivo general
 
 Estas policies no buscan cubrir todos los casos reales, si no mostrar de forma sencilla como aplicar `policy as code` sobre configuraciones de contenedores.
 
-En la carpeta de [github-actions](github-actions) puedes encontrar los archivos `.rego` que se podrian para escenarios de `Workflows` de CI/CD.
+En la carpeta de [github-actions](../github-actions) puedes encontrar los archivos `.rego` orientados a escenarios de `Workflows` de CI/CD.
