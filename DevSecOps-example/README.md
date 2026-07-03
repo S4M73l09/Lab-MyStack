@@ -227,7 +227,7 @@ Aqui se muestra el uso de dichas herramientas en los pipelines de CI/CD, permiti
 
 ***Pipeline basico de Docker con DevSecOps***
 
-[`.github/workflows/basic-devsecops-docker.yaml`](../.github/workflows/basic-devsecops-docker.yaml)
+### [`.github/workflows/basic-devsecops-docker.yaml`](../.github/workflows/basic-devsecops-docker.yaml)
 
 <details>
   <summary><strong> Explicacion del pipeline</strong></summary>
@@ -254,6 +254,39 @@ Aqui se muestra el uso de dichas herramientas en los pipelines de CI/CD, permiti
   - entender el orden entre validacion, build, escaneo y comprobacion de salud
   - mostrar un flujo `DevSecOps` sencillo pero cercano a un caso real
 </details>
+
+
+***pipeline avanzado de Docker con DevSecOps***
+
+### [`.github/workflows/advanced-devsecops-docker.yaml`](../.github/workflows/advanced-devsecops-docker.yaml)
+
+<details>
+  <summary><strong> Explicacion del pipeline</strong></summary>
+
+  Este pipeline se ejecuta en:
+  - `push` a la rama `main`
+  - `pull_request`
+  - `workflow_dispatch`
+
+  Que hace:
+  1. Hace `checkout` del repositorio
+  2. Valida la configuracion del compose con `docker compose config`
+  3. Ejecuta validacion de misconfigurations de `Checkov`
+  4. Instala y configura `Conftest`
+  5. Se aplica las politicas `.rego` despues de la instalacion anterior
+  6. Construye la imagen de `Docker`
+  7. Empieza el escaneo de vulnerabilidades de dicha imagen con `Trivy`
+  8. Se sube el artifact del reporte generado por `Trivy`
+  9. Verifica que la App responde a su endpoint de salud
+  10. Muestra los contenedores ejecutandose
+  11. Muestra logs si falla algo
+  12. Borra los contenedores y los volumenes
+
+  Objetivo educativo:
+  - Entender el como integrar validacion de configuracion e imagen en un pipeline real
+  - Entender el orden entre validacion, build, escaneo y comprobacion real
+  - Mostrar el flujo `DevSecOps` sencillo pero cercano a un caso real
+  </details>
 
 # Documentacion oficial
 
