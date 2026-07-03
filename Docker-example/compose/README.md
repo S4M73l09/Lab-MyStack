@@ -17,7 +17,7 @@ Aqui podemos ver un ejemplo basico de un archivo `compose.yaml` usando un servic
 
 ## Explicaciones de ejemplos practicos Compose
 
-[`basic-compose.yaml`](basic-compose.yaml)
+### [`basic-compose.yaml`](basic-compose.yaml)
 <details>
   <summary><strong> Explicacion de compose </strong></summary>
 
@@ -64,7 +64,7 @@ Aqui podemos ver un ejemplo basico de un archivo `compose.yaml` usando un servic
 
 En este siguiente ejemplo podemos ver el uso de una imagen `Docker` utilizando `Postgres y Adminer` lo cual nos permite ver el flujo por ejemplo de crear, desplegar, visualizar y administrar una base de datos de ***PostgresSQL*** añadiendo digest + tag, ademas de añadir comandos para detener y eliminar contenedores para refrescar el volumen del `.compose.yaml`
 
-[db-compose.yaml](db-compose.yaml)
+### [`db-compose.yaml`](db-compose.yaml)
 <details>
   <summary><strong> Explicacion de este db-compose </strong></summary>
 
@@ -107,7 +107,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 </details>
 
 
-[app-db-compose.yaml](app-db-compose.yaml)  
+### [`app-db-compose.yaml`](app-db-compose.yaml)  
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
 
@@ -133,7 +133,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 </details>
 
 
-[redis-compose.yaml](redis-compose.yaml)
+### [`redis-compose.yaml`](redis-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
 
@@ -197,7 +197,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 </details>
 
 
-[proxy-compose.yaml](proxy-compose.yaml)
+### [`proxy-compose.yaml`](proxy-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
 
@@ -221,7 +221,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 </details>
 
 
-[worker-compose.yaml](worker-compose.yaml)
+### [`worker-compose.yaml`](worker-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
 
@@ -253,7 +253,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 </details>
 
 
-[dev-compose.yaml](dev-compose.yaml)
+### [`dev-compose.yaml`](dev-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
 
@@ -278,7 +278,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 </details>
 
 
-[multi-network-compose.yaml](multi-network-compose.yaml)
+### [`multi-network-compose.yaml`](multi-network-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
 
@@ -304,7 +304,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 </details>
 
 
-[secrets-config-compose.yaml](secrets-config-compose.yaml)
+### [`secrets-config-compose.yaml`](secrets-config-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
 
@@ -324,7 +324,7 @@ Dicho comando anterior es exactamente igual al despliegue en segundo plano de lo
 </details>
 
 
-[observability-compose.yaml](observability-compose.yaml)
+### [`observability-compose.yaml`](observability-compose.yaml)
 <details>
   <summary><strong> Explicacion de este compose </strong></summary>
 
