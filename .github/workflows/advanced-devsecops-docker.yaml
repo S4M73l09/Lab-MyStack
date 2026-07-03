@@ -1,0 +1,96 @@
+name: advanced-devsecops-docker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+concurrency:
+  group: advanced-devsecops-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  docker-devsecops-advanced:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+    # Valida la configuracion de docker-compose
+      - name: Validate Docker Compose file
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml config
+
+    # Ejecuta Checkov para revisar el bloque de Docker y muestra el findings con mas claridad
+      - name: Run Checkov on compose
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          file: Docker-example/compose/app-db-compose.yaml
+          quiet: false
+
+    # Se instala y configura Conftest para aplicar las politicas
+      - name: Install Conftest
+        run: |
+          curl -L -o conftest.tar.gz https://github.com/open-policy-agent/conftest/releases/download/v0.59.0/conftest_0.59.0_Linux_x86_64.tar.gz
+          tar -xzf conftest.tar.gz
+          sudo mv conftest /usr/local/bin/conftest
+
+      - name: Run Conftest policies on compose
+        run: conftest test Docker-example/compose/app-db-compose.yaml --policy DevSecOps-example/OPA-Conftest
+
+    # Se construye la imagen de Docker
+      - name: Build Docker image
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml build
+
+    # Se empieza el escaneo de Trivy para vulnerabilidades
+      - name: Run Trivy image scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: basic-app-db:latest
+          format: table
+          output: trivy-report.txt
+          exit-code: '0'
+          severity: HIGH,CRITICAL
+
+    # Se sube el artifact para descargarlo de Trivy para asi no cortar el despliegue por ser demasido restrictivo
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.txt
+
+    # Comienza los servicios
+      - name: Start services
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml up -d
+
+    # Verifica que la App responde correctamente para validar si esta saludable
+      - name: Verify app health
+        run: |
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:5000/health; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "App healthcheck failed"
+          exit 1
+
+    # Se muestra los contenedores ejecutandose
+      - name: Show running containers
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml ps
+
+    # Muestra los logs si falla
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml logs
+
+    # Borra y limpia los contenedores y volumenes
+      - name: Cleanup
+        if: always()
+        run: docker compose -f Docker-example/compose/app-db-compose.yaml down -v
