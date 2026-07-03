@@ -14,7 +14,6 @@ deny[msg] {
   some service_name
   service := input.services[service_name]
   service.ports
-  service_name != "nginx"
-  service_name != "app"
+  not allowed_public_services[service_name]
   msg := sprintf("El servicio '%s' publica puertos al host y deberia revisarse si es necesario.", [service_name])
 }
