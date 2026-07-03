@@ -1,6 +1,6 @@
 package main
 
-deny contains msg if {
+deny[msg] {
   some service_name
   service := input.services[service_name]
   not service.healthcheck

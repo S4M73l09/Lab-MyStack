@@ -1,6 +1,6 @@
 package main
 
-deny contains msg if {
+deny[msg] {
   not input.permissions
   msg := "El workflow no define permissions explicitamente."
 }

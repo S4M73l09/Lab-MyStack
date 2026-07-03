@@ -4,7 +4,7 @@ local_images := {
   "basic-app-db:latest",
 }
 
-deny contains msg if {
+deny[msg] {
   some service_name
   service := input.services[service_name]
   image := service.image
