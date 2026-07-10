@@ -1,0 +1,2 @@
+file_name    = "example.txt"
+file_content = "Terraform example for educational purposes."
