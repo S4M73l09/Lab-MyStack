@@ -4,7 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'DevSecOps-example/**'
+      - '.github/workflows/advanced-devsecops-docker.yaml'
+      - 'Docker-example/compose/**'
   pull_request:
+    paths:
+      - 'DevSecOps-example/**'
+      - '.github/workflows/advanced-devsecops-docker.yaml'
+      - 'Docker-example/compose/**'
   workflow_dispatch:
 
 permissions:
