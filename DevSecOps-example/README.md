@@ -97,6 +97,8 @@ Estos comandos toman ejemplos del repo, la idea es que se entienda.
 
 - `fs` para archivos del proyecto
 - `image` para imagenes de contenedores
+- `scan-type: fs`escanear filesystem en pipelines
+- `scan-ref: Path` escanear los archivos de la carpeta objetivo
 - `--severity` para filtrar niveles de vulnerabilidades
 - `--exit-code 1` para usarlo en CI/CD
 
