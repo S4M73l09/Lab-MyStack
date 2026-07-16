@@ -2,11 +2,18 @@ name: Basic-image-docker
 
 on:
   push:
+# Permite que el workflow se dispare cada vez que se pushee en la rama de main, ademas de incluir filtros
     branches:
       - main
-  workflow_dispatch:
-
+# Estos filtros sirven para que el workflow se dispare si ha habido alguno cambio dentro de estas rutas.
+    paths:
+      - '.github/workflows/Basic-image-docker.yaml'
+      - 'Docker-example/compose/**'
   pull_request:
+    paths:
+      - '.github/workflows/Basic-image-docker.yaml'
+      - 'Docker-example/compose/**'
+  workflow_dispatch:
 
 # Permission: Los permisos que contiene el workflow
 

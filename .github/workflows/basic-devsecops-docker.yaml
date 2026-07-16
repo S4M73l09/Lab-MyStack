@@ -1,11 +1,19 @@
 name: basic-devsecops-docker
 
-# Se activa el pipeline al pushear a la rama main y haciendo PR
+# Se activa el pipeline al pushear a la rama main y haciendo PR si toca alguna de las rutas puestas.
 on:
   push:
     branches:
       - main
+    paths:
+      - 'DevSecOps-example/**'
+      - '.github/workflows/basic-devsecops-docker.yaml'
+      - 'Docker-example/compose/**'
   pull_request:
+    paths:
+      - 'DevSecOps-example/**'
+      - '.github/workflows/basic-devsecops-docker.yaml'
+      - 'Docker-example/compose/**'
   workflow_dispatch:
 
 # permisos de escritura para eventos de seguridad y lectura

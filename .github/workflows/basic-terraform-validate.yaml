@@ -2,9 +2,16 @@ name: basic-terraform-validate
 
 on:
   push:
+# El workflow se dispara pusheando main y si existe algun cambio en las rutas puestas
     branches:
       - main
+    paths:
+      - 'Terraform-example/basic/**'
+      - '.github/workflows/basic-terraform-validate.yaml'
   pull_request:
+    paths:
+      - 'Terraform-example/basic/**'
+      - '.github/workflows/basic-terraform-validate.yaml'
   workflow_dispatch:
 
 permissions:
@@ -15,6 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+# Este es el steps usado para la validacion, inicializacion y planificacion de Terraform
   terraform-basic:
     runs-on: ubuntu-latest
     defaults:
