@@ -172,6 +172,10 @@ Puedes encontrar las `policies.rego` de `docker compose` en la carpeta de [OPA-C
 
 `TFLint` es una herramienta de validacion orientada a `Terraform`. Se usa para detectar errores, malas practicas y configuraciones mejorables en archivos de infraestructura como codigo.
 
+Puedes ver el uso de de dicho `TFLint` en esta ruta completa [Terraform-example/basic](../Terraform-example/basic)
+
+y en el workflow por supuesto [terraform-devsecops-validate.yaml](...github/workflows/terraform-devsecops-validate.yaml)
+
 ### Por que se usa  
 
 Su objetivo no es sustituir a `terraform validate`, sino complementarlo con validacion de reglas mas especificas y comprobaciones adicionales.
