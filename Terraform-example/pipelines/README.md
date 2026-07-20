@@ -59,3 +59,28 @@ Este apartado se conecta con:
 
 </details>
 
+---
+
+#### [terraform-devsecops-validate.yaml](../.github/workflows/terraform-devsecops-validate.yaml)
+<details>
+ <summary><strong> Explicacion de este pipeline con practicas devsecops </strong></summary>
+
+ Este `terraform-devsecops-validate.yaml` es un pipeline basico encargado de mostrar el orden a la hora de usar herramientas de validacion y seguridad `Terraform` junto con `Github Actions`.
+
+ Que hace:
+ - Se activa con un `push` tocando la estructura de carpetas
+ - hace escaneo con `Checkov`
+ - escanea el filesystem con `trivy`
+ - `tflint` se encarga de la validacion de sintaxis
+ - hace `setup-terraform`
+ - crea el `tfplan`
+ - sube el plan como `artifact` y lo comprime en `.zip`
+ - se muestra bloque educativo con el `apply`usando el `tfplan` descargado
+
+ Objetivo educativo:
+ 1. Mostrar el uso de herramientas `DevSecOps` en pipelines
+ 2. Subida de artifact y descarga
+ 3. Comprender el procedimiento de aplicar seguridad en pipelines CI/CD
+
+</details>
+
