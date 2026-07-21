@@ -14,6 +14,15 @@ Cada apartado esta separado del ***README.md*** principal, para asi no mezclar e
 
 ## Indice
 
+- [Que es DevOps](#que-es-devops)
+   - [Filosofia de automatizacion](#filosofia-de-automatizacion)
+- [Que es un runner en GitHub Actions y en general](#que-es-un-runner-en-github-actions-y-en-general)
+   - [GitHub-hosted runner](#github-hosted-runner)
+   - [Self-hosted runner](#self-hosted-runner)
+   - [Idea comun entre plataformas](#idea-comun-entre-plataformas)
+- [Equivalencia en otras plataformas](#equivalencia-en-otras-plataformas)
+   - [GitLab CI/CD](#gitlab-ci/cd)
+   - [Jenkins](#jenkins)
 - [Pipelines Basicos](#pipelines-basicos)
    - [Explicaciones de los pipelines](#explicaciones-de-los-pipelines)
    - [Explicaciones de ejemplos de pipelines](#explicacion-de-ejemplos-de-pipelines)
@@ -33,6 +42,137 @@ Cada apartado esta separado del ***README.md*** principal, para asi no mezclar e
 ---
 
 En este apartado se mostrara las explicaciones y ejemplos para el uso de workflows o pipelines de CI/CD, mostrando como funciona y evolucionando poco a poco para aprender de mejor manera el uso de estos, tambien añadiendo complejidad conforme mas queramos evolucionar.
+
+# Filosofia DevOps
+
+## Que es DevOps
+
+`DevOps` no es solo crear pipelines o automatizar despliegues.
+Es una forma de trabajar que busca unir desarrollo, operaciones y automatizacion para entregar cambios de forma mas rapida, repetible y segura.
+
+Su objetivo principal es reducir tareas manuales, mejorar la colaboracion entre equipos y crear procesos tecnicos que pueden validarse, repetirse y mantener con facilidad.
+
+Dentro de este enfoque suelen entrar practicas como:
+
+- integracion continua (`CI`)
+- entrega o despliegue continuo (`CD`)
+- infraestructura como codigo (`IaC`)
+- observabilidad
+- seguridad integrada en el ciclo de vida (`DevSecOps`)
+
+### Filosofia de automatizacion
+
+En este repositorio, los ejemplos no buscan solo mostrar sintaxis o archivos de configuracion, sino enseñar por que se automatizan ciertos procesos.
+
+Automatizar en entornos `DevOps` permite:
+
+- validar cambios antes de integrarlos o desplegarlos
+- reducir errores comunes
+- repetir el mismo proceso de forma controlada
+- dejar evidencia trazable de lo que se ha ejecutado
+- integrar controles de calidad y seguridad desde fases tempranas
+
+Por eso en este laboratorio/educativo se muestran ejemplos con:
+
+- `lint`
+- validaciones
+- `plans`
+- escaneos de seguridad
+- policies como codigo
+- workflows de `GitHub Actions`
+
+---
+
+Para entender el funcionamiento de `pipelines` debemos comprender primero lo que lo ejecuta:
+
+## Que es un runner en GitHub Actions y en general
+
+Un `runner` es la maquina o entorno que ejecuta los jobs de un workflow.
+
+Cuando un pipeline se dispara, cada job necesita un runner donde ejecutar comandos, instalar herramientas/dependencias, validar codigo o lanzar pruebas.
+
+En las plataformas donde se permite el uso de pipelines para entornos DevOps se le conoce como otros nombres:
+
+🐙 GitHub - Runner  
+
+🦊 GitLab  - GitLab Runner  
+
+🔷 Azure DevOps - Agent  
+
+🤵 Jenkins - Agent o Node  
+
+En `GitHub` por ejemplo usa su propio runner, el cual indicas en el pipeline, este se encarga del job y despues se elimina.
+
+### GitHub-hosted runner
+
+Un `GitHub-hosted runner` es una maquina temporal gestionada por `GitHub`.
+
+Caracteristicas principales:
+
+- GitHub prepara el entorno automaticamente
+- se usa durante la ejecucion del job
+- se destruye al finalizar
+- es ideal para ejemplos educativo, validaciones, pruebas y automatizaciones comunes
+
+Es la opcion mas comoda cuando se necesita acceso a redes privadas o herramientas muy especificas.
+
+### Self-hosted runner
+
+Un `self-hosted runner` es una maquina administrada por el propio usuario o por la infraestructura del proyecto.
+
+Caracteristicas principales:
+
+- el entorno lo preparas y mantienes tu
+- permite usar redes internas o recursos privados
+- sirve para integrar herramientas concretas o dependencias especiales
+- requiere mas control, mantenimiento y medidas de seguridad
+
+Suele usarse en entornos empresariales o cuando el pipeline necesita acceso a infraestructura que no deberia exponerse a runners publicos.
+
+## Equivalencia en otras plataformas
+
+Aunque en `GitHub Actions` se usa el termino `runner`, otras plataformas emplean conceptos muy parecidos para ejecutar pipelines.
+
+### GitLab CI/CD
+
+En `GitLab`, los jobs definidos en `.gitlab-ci.yml` se ejecutan mediante `Gitlab Runners`.
+
+Estos runners pueden ser:
+
+- compartidos
+- especificos para un proyecto o grupo
+- autogestionados dentro de infraestructura propia
+
+Su funcion es equivalente a la de un runner en `GitHub Actions`: ejecutar pasos automatizados dentro del pipeline.
+
+### Jenkins
+
+En `Jenkins`, el concepto equivalente suele representarse mediante `agents` o `nodes`.
+
+Estos agentes son los entornos donde Jenkins ejecuta stages, scripts y tareas del pipeline.
+
+Pueden estar configurados de varias formas:
+
+- maquinas fijas
+- contenedores
+- agentes dinamicos
+- entornos orquestados, por ejemplo `Kubernetes`
+
+Aunque la terminologia cambia, la idea es la misma: disponer de un entorno donde correr de forma automatizada los procesos definidos en el pipeline.
+
+### Idea comun entre plataformas
+
+Tanto en `GitHub Actions`, como en `GitLab CI/CD` o `Jenkins`, siempre existe un componente encargado de ejecutar el trabajo automatizado del pipeline.
+
+La diferencia principal suele estar en:
+
+- quien administra el entorno
+- donde se ejecuta
+- cuanto control tienes sobre el sistema
+- que nivel de mantenimiento y seguridad requiere
+
+---
+
 
 # Pipelines Basicos
 
