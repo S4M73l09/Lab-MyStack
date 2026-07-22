@@ -45,7 +45,9 @@ Para mejorar el entorno educativo, esta parte del repositorio cuenta con una est
 
 - [Modulos de Terraform](modules): En este directorio se encuentra tanto la explicacion como el funcionamiento de lo modulos que se pueden asigar a Terraform para tareas concretas, como crear un modulo que apague una VM si esta no ha sido usada durante 30 minutos.
 
-- [Pipelines de Terraform](pipelines):
+- [Pipelines de Terraform](pipelines): En esta ruta se muestra el uso de pipelines de `Terraform`, donde se muestran buenas practicas, el uso de Artifacts, validacion, practicas `DevSecOps` y todo ello explicando de forma concisa el uso de estos pipelines
+
+> nota: En DevOps, los pipelines se formulan en cuestion al contexto del proyecto, estos pipelines que se muestran son solo formas de ejemplificar su uso, esto no describe la practica que se lleve en empresas.
 
 - [providers](providers): Aqui se cuenta con la explicacion del uso de Terraform en grandes entornos Cloud como `Azure`, `AWS` y `GCP`.
 

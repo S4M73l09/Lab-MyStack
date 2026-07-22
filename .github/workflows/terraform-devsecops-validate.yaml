@@ -44,8 +44,11 @@ jobs:
           tar -xzf conftest.tar.gz
           sudo mv conftest /usr/local/bin/conftest
 
-      - name: Run conftest policies on Terraform
-        run: conftest test . --policy ../../DevSecOps-example/OPA-Conftest/terraform
+      - name: Run conftest policies on Terraform version constraints
+        run: conftest test main.tf --policy ../../DevSecOps-example/OPA-Conftest/terraform/version
+
+      - name: Run conftest policies on Terraform variable description
+        run: conftest test variables.tf --policy ../../DevSecOps-example/OPA-Conftest/terraform/variables
 
         # Se añade scan-type: escanea filesystem - scan-ref: escanea la ruta objetiva
       - name: Run trivy filesystem scan on Terraform
