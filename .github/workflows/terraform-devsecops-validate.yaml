@@ -57,6 +57,9 @@ jobs:
       - name: Debug Conftest parse main.tf
         run: conftest parse main.tf
 
+      - name: Debug Conftest parse variables.tf
+        run: conftest parse variables.tf
+
       - name: Run conftest policies on Terraform version constraints
         run: conftest test main.tf --policy ../../DevSecOps-example/OPA-Conftest/terraform/version
 
