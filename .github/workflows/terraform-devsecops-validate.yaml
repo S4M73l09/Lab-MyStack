@@ -44,6 +44,19 @@ jobs:
           tar -xzf conftest.tar.gz
           sudo mv conftest /usr/local/bin/conftest
 
+      - name: Debug current directory
+        run: |
+          pwd
+          ls -la
+          ls -la ../../DevSecOps-example/OPA-Conftest/terraform
+          ls -la ../../DevSecOps-example/OPA-Conftest/terraform/version
+
+      - name: Debug Conftest version
+        run: conftest --version
+
+      - name: Debug Conftest parse main.tf
+        run: conftest parse main.tf
+
       - name: Run conftest policies on Terraform version constraints
         run: conftest test main.tf --policy ../../DevSecOps-example/OPA-Conftest/terraform/version
 
@@ -71,6 +84,7 @@ jobs:
 # Job de Terraform, encargado de hacer el plan, el apply se haria en otro job
   terraform-validate:
     runs-on: ubuntu-latest
+    needs: devsecops-practice
     defaults:
       run:
         working-directory: Terraform-example/basic
